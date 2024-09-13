@@ -1,0 +1,107 @@
+Table "tasks" {
+  "id" INt [pk, increment]
+  "taskname" TEXT
+  "tasklink" TEXT
+  "tags" TEXT
+  "batch_id" INT
+}
+
+Table "courses" {
+  "id" INT [pk, increment]
+  "course_name" TEXT
+  "course_price" FLOAT
+  "course_type" VARCHAR(30)
+}
+
+Table "mentors" {
+  "id" INT [pk, increment]
+  "mentor_name" TEXT
+  "instructed_course_id" INT
+  "mentor_rating" FLOAT
+}
+
+Table "batches" {
+  "id" INT [pk, increment]
+  "batch_name" TEXT
+  "batch_language" VARCHAR(30)
+  "mentor_id" INT
+  "course_id" int
+}
+
+Table "marks" {
+  "id" INT [pk, increment]
+  "student_id" INT
+  "task_id" INT
+  "mark" FLOAT
+  "eval_mentor_id" INT
+}
+
+Table "students" {
+  "id" INT [pk, increment]
+  "student_name" TEXT
+  "course_id" INT
+  "batch_id" INT
+  "tasks_completed" INT
+}
+
+Table "dashboard" {
+  "id" INT [pk, increment]
+  "student_id" INT
+  "tasks_completed" INT
+  "marks_totals" FLOAT
+}
+
+Table "leaderboard" {
+  "id" INT [pk, increment]
+  "student_id" INT
+  "student_rank" INT
+}
+
+Table "queries" {
+  "id" INT [pk, increment]
+  "student_id" INT
+  "assigned_mentor_id" INT
+  "query_tag" TEXT
+  "query_status" TINYINT
+}
+
+Table "feedbacks" {
+  "id" INT [pk, increment]
+  "batch_id" INT
+  "student_id" INT
+  "mentor_id" INT
+  "session_rating" FLOAT
+  "session_feedback" TEXT
+  "mentor_rating" FLOAT
+  "mentor_feedback" TEXT
+}
+
+Ref:"courses"."id" < "mentors"."instructed_course_id"
+
+Ref:"mentors"."id" < "batches"."mentor_id"
+
+Ref:"courses"."id" < "batches"."course_id"
+
+Ref:"tasks"."id" < "marks"."task_id"
+
+Ref:"mentors"."id" < "marks"."eval_mentor_id"
+
+Ref:"courses"."id" < "students"."course_id"
+
+Ref:"batches"."id" < "students"."batch_id"
+
+Ref:"students"."id" < "marks"."student_id"
+
+Ref:"students"."id" < "dashboard"."student_id"
+
+Ref:"students"."id" < "leaderboard"."student_id"
+
+Ref:"students"."id" < "queries"."student_id"
+
+Ref:"mentors"."id" < "queries"."assigned_mentor_id"
+
+Ref:"batches"."id" < "feedbacks"."batch_id"
+
+Ref:"students"."id" < "feedbacks"."student_id"
+
+Ref:"mentors"."id" < "feedbacks"."mentor_id"
